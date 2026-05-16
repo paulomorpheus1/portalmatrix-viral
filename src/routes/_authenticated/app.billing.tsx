@@ -29,7 +29,7 @@ function Page() {
 
   const charge = async (cents: number) => {
     setBusy(true);
-    const r = await createPix({ data: { kind: "credit_topup", amount_cents: cents, description: "Top-up créditos" } });
+    const r = await createPix({ data: { kind: "pix", amount_cents: cents, description: "Top-up créditos" } });
     setBusy(false);
     if (!r.ok) return toast.error(r.error);
     if (r.awaiting_api_key) toast.warning("Pagamento criado em modo pending. Adicione INFINITEPAY_API_KEY para gerar Pix real.");

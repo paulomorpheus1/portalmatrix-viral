@@ -10,7 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const Schema = z.object({
-  kind: z.enum(["one_off", "credit_topup", "subscription"]).default("credit_topup"),
+  kind: z.enum(["pix", "one_time", "subscription", "payout"]).default("pix"),
   amount_cents: z.number().int().min(100).max(10_000_000),
   description: z.string().max(140).optional(),
 });
@@ -62,7 +62,7 @@ export const createPixCharge = createServerFn({ method: "POST" })
       external_id,
       pix_qr_code,
       pix_copy_paste,
-      payload,
+      payload: payload as never,
     }).select().single();
 
     if (error) return { ok: false as const, error: error.message };

@@ -45,7 +45,7 @@ export const Route = createFileRoute("/api/public/infinitepay-webhook")({
             await supabaseAdmin.from("payments")
               .update({ status, payload: { ...((pay.payload as object) ?? {}), last_event: event } })
               .eq("id", pay.id);
-            if (status === "succeeded" && pay.user_id && pay.kind === "credit_topup") {
+            if (status === "succeeded" && pay.user_id && (pay.kind === "pix" || pay.kind === "one_time")) {
               const credits = Math.floor(pay.amount_cents / 10); // R$0,10 = 1 crédito
               const { data: wallet } = await supabaseAdmin.from("credits_wallet")
                 .select("*").eq("user_id", pay.user_id).maybeSingle();
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/api/public/infinitepay-webhook")({
         }
 
         await supabaseAdmin.from("webhook_logs").insert({
-          source: "infinitepay", event, payload: payload as object,
+          source: "infinitepay", event, payload: payload as never,
           signature_ok: signatureOk, processed_at: new Date().toISOString(),
         });
 
