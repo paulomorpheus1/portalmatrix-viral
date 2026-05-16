@@ -60,7 +60,7 @@ export const invokeCapability = createServerFn({ method: "POST" })
           latency_ms: latency,
           success: true,
         });
-        return { ok: true as const, provider: slug, data: result.data };
+        return { ok: true as const, provider: slug, data: result.data as Record<string, unknown> };
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         lastError = msg;
