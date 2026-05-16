@@ -9,38 +9,271 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as AuthenticatedAppTrendsRouteImport } from './routes/_authenticated/app.trends'
+import { Route as AuthenticatedAppSocialRouteImport } from './routes/_authenticated/app.social'
+import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
+import { Route as AuthenticatedAppProvidersRouteImport } from './routes/_authenticated/app.providers'
+import { Route as AuthenticatedAppPolicyRouteImport } from './routes/_authenticated/app.policy'
+import { Route as AuthenticatedAppLogsRouteImport } from './routes/_authenticated/app.logs'
+import { Route as AuthenticatedAppJarvisRouteImport } from './routes/_authenticated/app.jarvis'
+import { Route as AuthenticatedAppGovernanceRouteImport } from './routes/_authenticated/app.governance'
+import { Route as AuthenticatedAppGamificationRouteImport } from './routes/_authenticated/app.gamification'
+import { Route as AuthenticatedAppContentRouteImport } from './routes/_authenticated/app.content'
+import { Route as AuthenticatedAppBillingRouteImport } from './routes/_authenticated/app.billing'
+import { Route as AuthenticatedAppAiHealthRouteImport } from './routes/_authenticated/app.ai-health'
+import { Route as AuthenticatedAppAffiliateRouteImport } from './routes/_authenticated/app.affiliate'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
+  id: '/app/',
+  path: '/app/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppTrendsRoute = AuthenticatedAppTrendsRouteImport.update({
+  id: '/app/trends',
+  path: '/app/trends',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppSocialRoute = AuthenticatedAppSocialRouteImport.update({
+  id: '/app/social',
+  path: '/app/social',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppSettingsRoute =
+  AuthenticatedAppSettingsRouteImport.update({
+    id: '/app/settings',
+    path: '/app/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppProvidersRoute =
+  AuthenticatedAppProvidersRouteImport.update({
+    id: '/app/providers',
+    path: '/app/providers',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppPolicyRoute = AuthenticatedAppPolicyRouteImport.update({
+  id: '/app/policy',
+  path: '/app/policy',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppLogsRoute = AuthenticatedAppLogsRouteImport.update({
+  id: '/app/logs',
+  path: '/app/logs',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppJarvisRoute = AuthenticatedAppJarvisRouteImport.update({
+  id: '/app/jarvis',
+  path: '/app/jarvis',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppGovernanceRoute =
+  AuthenticatedAppGovernanceRouteImport.update({
+    id: '/app/governance',
+    path: '/app/governance',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppGamificationRoute =
+  AuthenticatedAppGamificationRouteImport.update({
+    id: '/app/gamification',
+    path: '/app/gamification',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppContentRoute = AuthenticatedAppContentRouteImport.update({
+  id: '/app/content',
+  path: '/app/content',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppBillingRoute = AuthenticatedAppBillingRouteImport.update({
+  id: '/app/billing',
+  path: '/app/billing',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppAiHealthRoute =
+  AuthenticatedAppAiHealthRouteImport.update({
+    id: '/app/ai-health',
+    path: '/app/ai-health',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppAffiliateRoute =
+  AuthenticatedAppAffiliateRouteImport.update({
+    id: '/app/affiliate',
+    path: '/app/affiliate',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/app/affiliate': typeof AuthenticatedAppAffiliateRoute
+  '/app/ai-health': typeof AuthenticatedAppAiHealthRoute
+  '/app/billing': typeof AuthenticatedAppBillingRoute
+  '/app/content': typeof AuthenticatedAppContentRoute
+  '/app/gamification': typeof AuthenticatedAppGamificationRoute
+  '/app/governance': typeof AuthenticatedAppGovernanceRoute
+  '/app/jarvis': typeof AuthenticatedAppJarvisRoute
+  '/app/logs': typeof AuthenticatedAppLogsRoute
+  '/app/policy': typeof AuthenticatedAppPolicyRoute
+  '/app/providers': typeof AuthenticatedAppProvidersRoute
+  '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/app/social': typeof AuthenticatedAppSocialRoute
+  '/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/app/affiliate': typeof AuthenticatedAppAffiliateRoute
+  '/app/ai-health': typeof AuthenticatedAppAiHealthRoute
+  '/app/billing': typeof AuthenticatedAppBillingRoute
+  '/app/content': typeof AuthenticatedAppContentRoute
+  '/app/gamification': typeof AuthenticatedAppGamificationRoute
+  '/app/governance': typeof AuthenticatedAppGovernanceRoute
+  '/app/jarvis': typeof AuthenticatedAppJarvisRoute
+  '/app/logs': typeof AuthenticatedAppLogsRoute
+  '/app/policy': typeof AuthenticatedAppPolicyRoute
+  '/app/providers': typeof AuthenticatedAppProvidersRoute
+  '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/app/social': typeof AuthenticatedAppSocialRoute
+  '/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/app': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/_authenticated/app/affiliate': typeof AuthenticatedAppAffiliateRoute
+  '/_authenticated/app/ai-health': typeof AuthenticatedAppAiHealthRoute
+  '/_authenticated/app/billing': typeof AuthenticatedAppBillingRoute
+  '/_authenticated/app/content': typeof AuthenticatedAppContentRoute
+  '/_authenticated/app/gamification': typeof AuthenticatedAppGamificationRoute
+  '/_authenticated/app/governance': typeof AuthenticatedAppGovernanceRoute
+  '/_authenticated/app/jarvis': typeof AuthenticatedAppJarvisRoute
+  '/_authenticated/app/logs': typeof AuthenticatedAppLogsRoute
+  '/_authenticated/app/policy': typeof AuthenticatedAppPolicyRoute
+  '/_authenticated/app/providers': typeof AuthenticatedAppProvidersRoute
+  '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/_authenticated/app/social': typeof AuthenticatedAppSocialRoute
+  '/_authenticated/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/app/affiliate'
+    | '/app/ai-health'
+    | '/app/billing'
+    | '/app/content'
+    | '/app/gamification'
+    | '/app/governance'
+    | '/app/jarvis'
+    | '/app/logs'
+    | '/app/policy'
+    | '/app/providers'
+    | '/app/settings'
+    | '/app/social'
+    | '/app/trends'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/app/affiliate'
+    | '/app/ai-health'
+    | '/app/billing'
+    | '/app/content'
+    | '/app/gamification'
+    | '/app/governance'
+    | '/app/jarvis'
+    | '/app/logs'
+    | '/app/policy'
+    | '/app/providers'
+    | '/app/settings'
+    | '/app/social'
+    | '/app/trends'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/signup'
+    | '/_authenticated/app/affiliate'
+    | '/_authenticated/app/ai-health'
+    | '/_authenticated/app/billing'
+    | '/_authenticated/app/content'
+    | '/_authenticated/app/gamification'
+    | '/_authenticated/app/governance'
+    | '/_authenticated/app/jarvis'
+    | '/_authenticated/app/logs'
+    | '/_authenticated/app/policy'
+    | '/_authenticated/app/providers'
+    | '/_authenticated/app/settings'
+    | '/_authenticated/app/social'
+    | '/_authenticated/app/trends'
+    | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +281,151 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/app/': {
+      id: '/_authenticated/app/'
+      path: '/app'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/trends': {
+      id: '/_authenticated/app/trends'
+      path: '/app/trends'
+      fullPath: '/app/trends'
+      preLoaderRoute: typeof AuthenticatedAppTrendsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/social': {
+      id: '/_authenticated/app/social'
+      path: '/app/social'
+      fullPath: '/app/social'
+      preLoaderRoute: typeof AuthenticatedAppSocialRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/settings': {
+      id: '/_authenticated/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AuthenticatedAppSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/providers': {
+      id: '/_authenticated/app/providers'
+      path: '/app/providers'
+      fullPath: '/app/providers'
+      preLoaderRoute: typeof AuthenticatedAppProvidersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/policy': {
+      id: '/_authenticated/app/policy'
+      path: '/app/policy'
+      fullPath: '/app/policy'
+      preLoaderRoute: typeof AuthenticatedAppPolicyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/logs': {
+      id: '/_authenticated/app/logs'
+      path: '/app/logs'
+      fullPath: '/app/logs'
+      preLoaderRoute: typeof AuthenticatedAppLogsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/jarvis': {
+      id: '/_authenticated/app/jarvis'
+      path: '/app/jarvis'
+      fullPath: '/app/jarvis'
+      preLoaderRoute: typeof AuthenticatedAppJarvisRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/governance': {
+      id: '/_authenticated/app/governance'
+      path: '/app/governance'
+      fullPath: '/app/governance'
+      preLoaderRoute: typeof AuthenticatedAppGovernanceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/gamification': {
+      id: '/_authenticated/app/gamification'
+      path: '/app/gamification'
+      fullPath: '/app/gamification'
+      preLoaderRoute: typeof AuthenticatedAppGamificationRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/content': {
+      id: '/_authenticated/app/content'
+      path: '/app/content'
+      fullPath: '/app/content'
+      preLoaderRoute: typeof AuthenticatedAppContentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/billing': {
+      id: '/_authenticated/app/billing'
+      path: '/app/billing'
+      fullPath: '/app/billing'
+      preLoaderRoute: typeof AuthenticatedAppBillingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/ai-health': {
+      id: '/_authenticated/app/ai-health'
+      path: '/app/ai-health'
+      fullPath: '/app/ai-health'
+      preLoaderRoute: typeof AuthenticatedAppAiHealthRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/affiliate': {
+      id: '/_authenticated/app/affiliate'
+      path: '/app/affiliate'
+      fullPath: '/app/affiliate'
+      preLoaderRoute: typeof AuthenticatedAppAffiliateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAppAffiliateRoute: typeof AuthenticatedAppAffiliateRoute
+  AuthenticatedAppAiHealthRoute: typeof AuthenticatedAppAiHealthRoute
+  AuthenticatedAppBillingRoute: typeof AuthenticatedAppBillingRoute
+  AuthenticatedAppContentRoute: typeof AuthenticatedAppContentRoute
+  AuthenticatedAppGamificationRoute: typeof AuthenticatedAppGamificationRoute
+  AuthenticatedAppGovernanceRoute: typeof AuthenticatedAppGovernanceRoute
+  AuthenticatedAppJarvisRoute: typeof AuthenticatedAppJarvisRoute
+  AuthenticatedAppLogsRoute: typeof AuthenticatedAppLogsRoute
+  AuthenticatedAppPolicyRoute: typeof AuthenticatedAppPolicyRoute
+  AuthenticatedAppProvidersRoute: typeof AuthenticatedAppProvidersRoute
+  AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
+  AuthenticatedAppSocialRoute: typeof AuthenticatedAppSocialRoute
+  AuthenticatedAppTrendsRoute: typeof AuthenticatedAppTrendsRoute
+  AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAppAffiliateRoute: AuthenticatedAppAffiliateRoute,
+  AuthenticatedAppAiHealthRoute: AuthenticatedAppAiHealthRoute,
+  AuthenticatedAppBillingRoute: AuthenticatedAppBillingRoute,
+  AuthenticatedAppContentRoute: AuthenticatedAppContentRoute,
+  AuthenticatedAppGamificationRoute: AuthenticatedAppGamificationRoute,
+  AuthenticatedAppGovernanceRoute: AuthenticatedAppGovernanceRoute,
+  AuthenticatedAppJarvisRoute: AuthenticatedAppJarvisRoute,
+  AuthenticatedAppLogsRoute: AuthenticatedAppLogsRoute,
+  AuthenticatedAppPolicyRoute: AuthenticatedAppPolicyRoute,
+  AuthenticatedAppProvidersRoute: AuthenticatedAppProvidersRoute,
+  AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
+  AuthenticatedAppSocialRoute: AuthenticatedAppSocialRoute,
+  AuthenticatedAppTrendsRoute: AuthenticatedAppTrendsRoute,
+  AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
