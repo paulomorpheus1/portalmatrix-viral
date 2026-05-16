@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as ApiPublicInfinitepayWebhookRouteImport } from './routes/api/public/infinitepay-webhook'
 import { Route as AuthenticatedAppTrendsRouteImport } from './routes/_authenticated/app.trends'
 import { Route as AuthenticatedAppSocialRouteImport } from './routes/_authenticated/app.social'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
@@ -52,6 +53,12 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   path: '/app/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicInfinitepayWebhookRoute =
+  ApiPublicInfinitepayWebhookRouteImport.update({
+    id: '/api/public/infinitepay-webhook',
+    path: '/api/public/infinitepay-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAppTrendsRoute = AuthenticatedAppTrendsRouteImport.update({
   id: '/app/trends',
   path: '/app/trends',
@@ -141,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/social': typeof AuthenticatedAppSocialRoute
   '/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
   '/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -160,6 +168,7 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/social': typeof AuthenticatedAppSocialRoute
   '/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
   '/app': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesById {
@@ -181,6 +190,7 @@ export interface FileRoutesById {
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/social': typeof AuthenticatedAppSocialRoute
   '/_authenticated/app/trends': typeof AuthenticatedAppTrendsRoute
+  '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRouteTypes {
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/social'
     | '/app/trends'
+    | '/api/public/infinitepay-webhook'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/social'
     | '/app/trends'
+    | '/api/public/infinitepay-webhook'
     | '/app'
   id:
     | '__root__'
@@ -241,6 +253,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/settings'
     | '/_authenticated/app/social'
     | '/_authenticated/app/trends'
+    | '/api/public/infinitepay-webhook'
     | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
 }
@@ -249,6 +262,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  ApiPublicInfinitepayWebhookRoute: typeof ApiPublicInfinitepayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -287,6 +301,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/infinitepay-webhook': {
+      id: '/api/public/infinitepay-webhook'
+      path: '/api/public/infinitepay-webhook'
+      fullPath: '/api/public/infinitepay-webhook'
+      preLoaderRoute: typeof ApiPublicInfinitepayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app/trends': {
       id: '/_authenticated/app/trends'
@@ -425,6 +446,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  ApiPublicInfinitepayWebhookRoute: ApiPublicInfinitepayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
