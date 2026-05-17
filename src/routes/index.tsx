@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Sparkles, Radar, Share2, ShieldCheck, Zap, Bot } from "lucide-react";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +25,29 @@ const FEATURES = [
 ];
 
 function Landing() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Verifica se há sessão ativa ou hash de token na URL
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session || window.location.hash.includes("access_token")) {
+        navigate({ to: "/app" });
+      }
+    };
+
+    checkSession();
+
+    // Escuta mudanças de auth para capturar o retorno do Google imediatamente
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || session) {
+        navigate({ to: "/app" });
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   const handleGoogleLogin = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
