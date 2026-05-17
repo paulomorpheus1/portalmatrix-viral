@@ -1,58 +1,119 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
-
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Criar conta · Portal Matrix Viral" }] }),
-  component: Signup,
-});
+export const Route = () => {
+  return <Signup />;
+};
 
 function Signup() {
-  const nav = useNavigate();
-  const [name, setName] = useState("");
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { name }, emailRedirectTo: window.location.origin + "/app" },
+  useEffect(() => {
+    const verificarSessao = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session || window.location.hash.includes("access_token")) {
+        navigate({ to: "/app" });
+      }
+    };
+
+    verificarSessao();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || session) {
+        navigate({ to: "/app" });
+      }
     });
-    setLoading(false);
-    if (error) return toast.error(error.message);
-    toast.success("Conta criada! Entrando no Matrix…");
-    void nav({ to: "/app" });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleGoogleSignup = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/signup",
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Erro OAuth Google no cadastro:", error.message);
+    }
   };
 
-  const onGoogle = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/app" });
-    if (r.error) toast.error(r.error.message);
+  const handleEmailSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCarregando(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password: senha,
+      });
+      if (error) throw error;
+      alert("Cadastro realizado! Verifique seu e-mail para confirmação.");
+      navigate({ to: "/login" });
+    } catch (error: any) {
+      alert("Erro no cadastro: " + error.message);
+    } finally {
+      setCarregando(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 matrix-grid">
-      <form onSubmit={onSubmit} className="glass rounded-xl p-8 w-full max-w-sm space-y-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold neon-text">Criar conta</h1>
-          <p className="text-xs text-muted-foreground mt-1">Ative seu Portal Matrix Viral</p>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 matrix-grid opacity-30" />
+      <div className="glass rounded-xl p-8 max-w-md w-full relative z-10 neon-border">
+        <h2 className="text-2xl font-bold text-center mb-6 neon-text">Criar Conta</h2>
+        <p className="text-xs text-center text-muted-foreground mb-4">Cadastre-se no Portal Matrix</p>
+        
+        <Button 
+          type="button" 
+          variant="outline" 
+          className="w-full mb-6" 
+          onClick={handleGoogleSignup}
+        >
+          Cadastrar com Google
+        </Button>
+
+        <div className="relative mb-6 text-center text-xs uppercase text-muted-foreground">
+          <span className="bg-background px-2">ou</span>
         </div>
-        <Button type="button" variant="outline" className="w-full" onClick={onGoogle}>Continuar com Google</Button>
-        <div className="relative text-center text-xs text-muted-foreground"><span className="bg-card px-2 relative z-10">ou</span><div className="absolute inset-0 top-1/2 border-t border-border" /></div>
-        <div className="space-y-2"><Label htmlFor="name">Nome</Label><Input id="name" required value={name} onChange={(e) => setName(e.target.value)} /></div>
-        <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-        <div className="space-y-2"><Label htmlFor="password">Senha</Label><Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} /></div>
-        <Button type="submit" className="w-full neon-border" disabled={loading} style={{ background: "var(--gradient-primary)" }}>{loading ? "Criando…" : "Criar conta"}</Button>
-        <p className="text-xs text-center text-muted-foreground">Já tem conta? <Link to="/login" className="text-accent">Entrar</Link></p>
-      </form>
+
+        <form onSubmit={handleEmailSignup} className="space-y-4">
+          <div>
+            <label className="text-sm block mb-1">Email</label>
+            <input 
+              type="email" 
+              className="w-full bg-background/50 border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="text-sm block mb-1">Senha</label>
+            <input 
+              type="password" 
+              className="w-full bg-background/50 border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full neon-border" disabled={carregando}>
+            {carregando ? "Criando conta..." : "Criar Conta"}
+          </Button>
+        </form>
+
+        <p className="text-xs text-center mt-6 text-muted-foreground">
+          Já tem uma conta? <Link to="/login" className="text-accent underline">Entrar</Link>
+        </p>
+      </div>
     </div>
   );
 }
