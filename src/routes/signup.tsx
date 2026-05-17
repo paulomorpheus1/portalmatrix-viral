@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "@tanstack/react-router";
+import { useNavigate, Link, createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = () => {
-  return <Signup />;
-};
+export const Route = createFileRoute("/signup")({
+  component: Signup,
+});
 
 function Signup() {
   const navigate = useNavigate();
