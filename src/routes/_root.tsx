@@ -1,8 +1,6 @@
 import { createRootRoute, Outlet, ScrollRestoration } from "@tanstack/react-router";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "@/app.css";
 
 const queryClient = new QueryClient();
 
@@ -13,11 +11,11 @@ export const Route = createRootRoute({
 function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="portal-matrix-theme">
+      <div className="dark min-h-screen bg-background text-foreground antialiased">
         <Outlet />
         <ScrollRestoration />
         <Toaster />
-      </ThemeProvider>
+      </div>
     </QueryClientProvider>
   );
 }
