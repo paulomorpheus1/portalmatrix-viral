@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as ApiPublicSchedulerTickRouteImport } from './routes/api/public/scheduler-tick'
 import { Route as ApiPublicInfinitepayWebhookRouteImport } from './routes/api/public/infinitepay-webhook'
 import { Route as AuthenticatedAppTrendsRouteImport } from './routes/_authenticated/app.trends'
 import { Route as AuthenticatedAppSocialRouteImport } from './routes/_authenticated/app.social'
@@ -52,6 +53,11 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiPublicSchedulerTickRoute = ApiPublicSchedulerTickRouteImport.update({
+  id: '/api/public/scheduler-tick',
+  path: '/api/public/scheduler-tick',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicInfinitepayWebhookRoute =
   ApiPublicInfinitepayWebhookRouteImport.update({
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/app/social': typeof AuthenticatedAppSocialRoute
   '/app/trends': typeof AuthenticatedAppTrendsRoute
   '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
+  '/api/public/scheduler-tick': typeof ApiPublicSchedulerTickRoute
   '/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/app/social': typeof AuthenticatedAppSocialRoute
   '/app/trends': typeof AuthenticatedAppTrendsRoute
   '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
+  '/api/public/scheduler-tick': typeof ApiPublicSchedulerTickRoute
   '/app': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesById {
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/_authenticated/app/social': typeof AuthenticatedAppSocialRoute
   '/_authenticated/app/trends': typeof AuthenticatedAppTrendsRoute
   '/api/public/infinitepay-webhook': typeof ApiPublicInfinitepayWebhookRoute
+  '/api/public/scheduler-tick': typeof ApiPublicSchedulerTickRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRouteTypes {
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/app/social'
     | '/app/trends'
     | '/api/public/infinitepay-webhook'
+    | '/api/public/scheduler-tick'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/app/social'
     | '/app/trends'
     | '/api/public/infinitepay-webhook'
+    | '/api/public/scheduler-tick'
     | '/app'
   id:
     | '__root__'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/social'
     | '/_authenticated/app/trends'
     | '/api/public/infinitepay-webhook'
+    | '/api/public/scheduler-tick'
     | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
 }
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   ApiPublicInfinitepayWebhookRoute: typeof ApiPublicInfinitepayWebhookRoute
+  ApiPublicSchedulerTickRoute: typeof ApiPublicSchedulerTickRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -301,6 +314,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/scheduler-tick': {
+      id: '/api/public/scheduler-tick'
+      path: '/api/public/scheduler-tick'
+      fullPath: '/api/public/scheduler-tick'
+      preLoaderRoute: typeof ApiPublicSchedulerTickRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/infinitepay-webhook': {
       id: '/api/public/infinitepay-webhook'
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   ApiPublicInfinitepayWebhookRoute: ApiPublicInfinitepayWebhookRoute,
+  ApiPublicSchedulerTickRoute: ApiPublicSchedulerTickRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
