@@ -1,131 +1,116 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
-
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Login · Portal Matrix Viral" }] }),
-  component: Login,
-});
-
-function Login() {
-  const nav = useNavigate();
-
+export function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    // Captura a sessão imediata ou o hash de retorno do OAuth do Google
+    const verificarSessao = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session || window.location.hash.includes("access_token")) {
+        navigate({ to: "/app" });
+      }
+    };
 
-    setLoading(true);
+    verificarSessao();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    // Escuta em tempo real o evento de login para forçar o roteador a mudar de página
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || session) {
+        navigate({ to: "/app" });
+      }
     });
 
-    setLoading(false);
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
-    if (error) {
-      toast.error(error.message);
-      return;
+  const handleGoogleLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/login", // Força o retorno para esta tela monitorada
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Erro OAuth Google:", error.message);
     }
-
-    toast.success("Bem-vindo ao Matrix");
-
-    void nav({ to: "/app" });
   };
 
-  const onGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo:
-          "https://portalmatrix-viral.paulormorpheus21.workers.dev/app",
-      },
-    });
-
-    if (error) {
-      toast.error(error.message);
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCarregando(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      });
+      if (error) throw error;
+      navigate({ to: "/app" });
+    } catch (error: any) {
+      alert("Erro no login: " + error.message);
+    } finally {
+      setCarregando(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 matrix-grid">
-      <form
-        onSubmit={onSubmit}
-        className="glass rounded-xl p-8 w-full max-w-sm space-y-4"
-      >
-        <div className="text-center">
-          <h1 className="text-2xl font-bold neon-text">Entrar</h1>
-
-          <p className="text-xs text-muted-foreground mt-1">
-            Acesse o Portal Matrix
-          </p>
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={onGoogle}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 matrix-grid opacity-30" />
+      <div className="glass rounded-xl p-8 max-w-md w-full relative z-10 neon-border">
+        <h2 className="text-2xl font-bold text-center mb-6 neon-text">Entrar</h2>
+        <p className="text-xs text-center text-muted-foreground mb-4">Acesse o Portal Matrix</p>
+        
+        <Button 
+          type="button" 
+          variant="outline" 
+          className="w-full mb-6" 
+          onClick={handleGoogleLogin}
         >
           Continuar com Google
         </Button>
 
-        <div className="relative text-center text-xs text-muted-foreground">
-          <span className="bg-card px-2 relative z-10">ou</span>
-
-          <div className="absolute inset-0 top-1/2 border-t border-border" />
+        <div className="relative mb-6 text-center text-xs uppercase text-muted-foreground">
+          <span className="bg-background px-2">ou</span>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+        <form onSubmit={handleEmailLogin} className="space-y-4">
+          <div>
+            <label className="text-sm block mb-1">Email</label>
+            <input 
+              type="email" 
+              className="w-full bg-background/50 border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="text-sm block mb-1">Senha</label>
+            <input 
+              type="password" 
+              className="w-full bg-background/50 border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full neon-border" disabled={carregando}>
+            {carregando ? "Entrando..." : "Entrar"}
+          </Button>
+        </form>
 
-          <Input
-            id="email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password">Senha</Label>
-
-          <Input
-            id="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          className="w-full neon-border"
-          disabled={loading}
-          style={{
-            background: "var(--gradient-primary)",
-          }}
-        >
-          {loading ? "Entrando…" : "Entrar"}
-        </Button>
-
-        <p className="text-xs text-center text-muted-foreground">
-          Sem conta?{" "}
-          <Link to="/signup" className="text-accent">
-            Criar agora
-          </Link>
+        <p className="text-xs text-center mt-6 text-muted-foreground">
+          Sem conta? <Link to="/signup" className="text-accent underline">Criar agora</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
