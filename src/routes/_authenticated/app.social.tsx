@@ -32,11 +32,11 @@ function Page() {
     if (!text) return;
     setBusy(true);
     const payload = { platform: platform as never, text, media_url: mediaUrl || undefined };
-    const r = when
+    const r = (when
       ? await schedule({ data: { ...payload, scheduled_for: new Date(when).toISOString() } })
-      : await publish({ data: payload });
+      : await publish({ data: payload })) as { ok: boolean; error?: string };
     setBusy(false);
-    if (!r.ok) toast.error(r.error);
+    if (!r.ok) toast.error(r.error ?? "Falha");
     else { toast.success(when ? "Agendado" : "Publicado"); setText(""); setMediaUrl(""); setWhen(""); void refetch(); }
   };
 
