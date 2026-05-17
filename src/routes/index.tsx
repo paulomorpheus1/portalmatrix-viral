@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Radar, Share2, ShieldCheck, Zap, Bot } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,6 +24,20 @@ const FEATURES = [
 ];
 
 function Landing() {
+  const handleGoogleLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Erro na autenticação:", error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="absolute inset-0 matrix-grid opacity-30" />
@@ -34,7 +49,9 @@ function Landing() {
         </Link>
         <nav className="flex items-center gap-3">
           <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-          <Link to="/signup"><Button size="sm" className="neon-border">Entrar no Matrix</Button></Link>
+          <Button size="sm" className="neon-border" onClick={handleGoogleLogin}>
+            Entrar no Matrix
+          </Button>
         </nav>
       </header>
 
@@ -50,7 +67,9 @@ function Landing() {
             escala premium ativando capabilities. InfinitePay integrado.
           </p>
           <div className="mt-8 flex justify-center gap-3">
-            <Link to="/signup"><Button size="lg" className="neon-border" style={{ background: "var(--gradient-primary)" }}>Ativar Matrix</Button></Link>
+            <Button size="lg" className="neon-border" style={{ background: "var(--gradient-primary)" }} onClick={handleGoogleLogin}>
+              Ativar Matrix
+            </Button>
             <Link to="/app"><Button size="lg" variant="outline">Acessar Command Center</Button></Link>
           </div>
         </section>
