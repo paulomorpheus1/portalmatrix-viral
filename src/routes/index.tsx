@@ -1,9 +1,7 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Radar, Share2, ShieldCheck, Zap, Bot } from "lucide-react";
-import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,43 +23,6 @@ const FEATURES = [
 ];
 
 function Landing() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Verifica se há sessão ativa ou hash de token na URL
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session || window.location.hash.includes("access_token")) {
-        navigate({ to: "/app" });
-      }
-    };
-
-    checkSession();
-
-    // Escuta mudanças de auth para capturar o retorno do Google imediatamente
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" || session) {
-        navigate({ to: "/app" });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  const handleGoogleLogin = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Erro na autenticação:", error.message);
-    }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="absolute inset-0 matrix-grid opacity-30" />
@@ -73,9 +34,7 @@ function Landing() {
         </Link>
         <nav className="flex items-center gap-3">
           <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-          <Button size="sm" className="neon-border" onClick={handleGoogleLogin}>
-            Entrar no Matrix
-          </Button>
+          <Link to="/signup"><Button size="sm" className="neon-border">Entrar no Matrix</Button></Link>
         </nav>
       </header>
 
@@ -91,9 +50,7 @@ function Landing() {
             escala premium ativando capabilities. InfinitePay integrado.
           </p>
           <div className="mt-8 flex justify-center gap-3">
-            <Button size="lg" className="neon-border" style={{ background: "var(--gradient-primary)" }} onClick={handleGoogleLogin}>
-              Ativar Matrix
-            </Button>
+            <Link to="/signup"><Button size="lg" className="neon-border" style={{ background: "var(--gradient-primary)" }}>Ativar Matrix</Button></Link>
             <Link to="/app"><Button size="lg" variant="outline">Acessar Command Center</Button></Link>
           </div>
         </section>
