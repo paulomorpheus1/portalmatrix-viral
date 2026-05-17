@@ -2,7 +2,7 @@ import { createRootRoute, Outlet, ScrollRestoration } from "@tanstack/react-rout
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "../app.css";
+import "@/app.css";
 
 const queryClient = new QueryClient();
 
