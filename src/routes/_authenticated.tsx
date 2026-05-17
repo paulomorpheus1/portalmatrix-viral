@@ -1,25 +1,27 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-
 import { supabase } from "@/integrations/supabase/client";
-import { MatrixSidebar } from "@/components/matrix/sidebar";
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) throw redirect({ to: "/login" });
+  beforeLoad: async ({ location }) => {
+    // Busca a sessão em tempo real direto na memória do cliente Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    // Verifica se o usuário não está autenticado e se não há token de retorno na URL
+    const temTokenNaUrl = location.href.includes("access_token") || window.location.hash.includes("access_token");
+
+    if (!session && !temTokenNaUrl) {
+      // Se não estiver logado e não for retorno do Google, joga direto para a tela de login
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
   },
-  component: AuthLayout,
+  component: AuthenticatedLayout,
 });
 
-function AuthLayout() {
-  return (
-    <div className="min-h-screen flex bg-background">
-      <MatrixSidebar />
-      <main className="flex-1 overflow-x-hidden">
-        <div className="mx-auto max-w-7xl p-6 md:p-10">
-          <Outlet />
-        </div>
-      </main>
-    </div>
-  );
+function AuthenticatedLayout() {
+  return <Outlet />;
 }
