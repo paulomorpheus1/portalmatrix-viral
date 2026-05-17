@@ -25,7 +25,7 @@ async function postTelegram({ text }: PostInput): Promise<PostResult> {
   });
   const json = (await res.json()) as { ok: boolean; result?: { message_id: number }; description?: string };
   if (!json.ok) return { ok: false, error: json.description ?? `tg ${res.status}` };
-  return { ok: true, external_id: String(json.result!.message_id), raw: json };
+  return { ok: true, external_id: String(json.result!.message_id) };
 }
 
 async function postTwitter({ text }: PostInput): Promise<PostResult> {
@@ -49,7 +49,7 @@ async function postFacebook({ text, media_url }: PostInput): Promise<PostResult>
   const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   const json = (await res.json()) as { id?: string; error?: { message?: string } };
   if (!json.id) return { ok: false, error: json.error?.message ?? `fb ${res.status}` };
-  return { ok: true, external_id: json.id, raw: json };
+  return { ok: true, external_id: json.id };
 }
 
 async function postInstagram({ text, media_url }: PostInput): Promise<PostResult> {
@@ -69,7 +69,7 @@ async function postInstagram({ text, media_url }: PostInput): Promise<PostResult
   });
   const pj = (await p.json()) as { id?: string; error?: { message?: string } };
   if (!pj.id) return { ok: false, error: pj.error?.message ?? "ig publish" };
-  return { ok: true, external_id: pj.id, raw: pj };
+  return { ok: true, external_id: pj.id };
 }
 
 async function postDiscord({ text }: PostInput): Promise<PostResult> {
