@@ -12,7 +12,7 @@ type Platform =
   | "youtube" | "kwai" | "discord" | "telegram";
 
 type PostInput = { text: string; media_url?: string };
-type PostResult = { ok: true; external_id: string; raw?: unknown } | { ok: false; error: string };
+type PostResult = { ok: true; external_id: string } | { ok: false; error: string };
 
 async function postTelegram({ text }: PostInput): Promise<PostResult> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
